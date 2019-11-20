@@ -1,3 +1,6 @@
+# Setup instructions #
+
+
 create workspace folder
 ~/reactor_ws
 and also src folder
@@ -11,6 +14,7 @@ catkin build
 sudo apt-get install ros-kinetic-dynamixel-controllers ros-kinetic-arbotix
 
 git clone https://github.com/RobotnikAutomation/phantomx_reactor_arm.git
+(or clone the updated fork https://github.com/NoamKu/phantomx_reactor_arm.git
 
 catkin build
 
@@ -43,6 +47,8 @@ For the arm with wrist
 
 roslaunch phantomx_reactor_arm_controller arbotix_phantomx_reactor_arm_wrist.launch
 
+**Troubleshooting**
 
+if rviz is not displaying the robot, in global options change fixed frame to base footprint
 
 

@@ -1,0 +1,22 @@
+<launch>
+  <!-- To use, first set Environment variable TURTLEBOT_ARM1 to either:
+   turtlebot or pincher (for Trossen PhantomX Pincher)
+   NOTE: passing arm_type as argument NOT yet fully supported! -->
+
+  <arg name="simulation" default="false"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find phantomx_reactor_arm_description)/urdf/phantomx_reactor_wrist.urdf.xacro'"/>
+
+  <node name="robot_state_pub" pkg="robot_state_publisher" type="state_publisher"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+    <rosparam file="$(find phantomx_reactor_arm_controller)/config/arbotix_config_phantomx_wrist.yaml" command="load"/>
+    <param name="sim" value="$(arg simulation)"/>
+  </node>
+
+  <node name="gripper_controller" pkg="arbotix_controllers" type="gripper_controller" output="screen">
+    <rosparam file="$(find phantomx_reactor_arm_controller)/config/arbotix_config_phantomx_wrist.yaml" command="load" />
+  </node>
+</launch>
