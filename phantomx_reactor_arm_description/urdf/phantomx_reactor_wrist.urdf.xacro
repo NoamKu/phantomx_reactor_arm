@@ -95,7 +95,8 @@
 			<child link="${prefix}bicep_link" />
 			<axis xyz="0 0 -1" />
 			<limit effort="3.0" velocity="6.178465545" lower="${shoulder_pitch_joint_lower_limit}" upper="${shoulder_pitch_joint_upper_limit}" />
-		</joint>	
+		</joint>
+
 		<link name="${prefix}bicep_link">
 			<inertial>
 			  <origin xyz="-0.079312 0.00175 0.0073486" rpy="-${PI/2} 0 -${PI/2}" />
@@ -120,6 +121,16 @@
 			  </geometry>
 			</collision>
 		</link>
+
+		<joint name="${prefix}shoulder_pitch_mimic_joint" type="revolute">
+			<origin xyz="0 0 0.0265" rpy="${PI/2} 0 0" />
+			<parent link="${prefix}shoulder_link" />
+			<child link="dummy_shoulder_link" />
+			<axis xyz="0 0 -1" />
+			<limit effort="3.0" velocity="6.178465545" lower="${shoulder_pitch_joint_lower_limit}" upper="${shoulder_pitch_joint_upper_limit}" />
+		</joint>
+
+		<link name="dummy_shoulder_link" />
 	  
 	    <!-- ELBOW PITCH-->
 		<joint name="${prefix}elbow_pitch_joint" type="revolute"> 
@@ -153,6 +164,14 @@
 				</geometry>
 			</collision>
 		</link>
+		<joint name="${prefix}elbow_pitch_mimic_joint" type="revolute"> 
+			<origin xyz="0.0385 0.1445 0" rpy="-${PI/2} 0 0" />
+			<parent link="${prefix}bicep_link" /> 
+			<child link="dummy_elbow_link" /> 
+			<axis xyz="0 1 0" /> <limit effort="3.0" velocity="6.178465545" lower="${elbow_pitch_joint_lower_limit}" upper="${elbow_pitch_joint_upper_limit}" />
+		</joint>
+
+		<link name="dummy_elbow_link" />
 		
 		<!-- WRIST PITCH-->
 		<joint name="${prefix}wrist_pitch_joint" type="revolute"> 

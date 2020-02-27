@@ -18,12 +18,12 @@ type ls
 
 if not! Try to harden the connector downstares on the arbotix board
 
-roslaunch turtlebot_arm_moveit_config demo.launch
+roslaunch phantomx_reactor_arm_moveit_config demo_reactor.launch 
 
 if you want to use python code
 open third terminal:
 
 cd reactor_ws/
 source devel/setup.bash
-rosrun phantomx_reactor_arm_moveit_demos pick_and_place.py
+rosrun phantomx_reactor_arm_demos pick_and_place.py
 

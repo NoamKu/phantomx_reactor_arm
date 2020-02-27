@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
 
   <!-- By default, we do not start a database (it can be large) -->
@@ -9,15 +10,36 @@
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
 
-  <!-- Load arm description, state and controllers in simulation mode -->
+  <!-- Load arm description, state and controllers in simulation mode
   <include file="$(find phantomx_reactor_arm_description)/launch/arm.launch">
     <arg name="simulation" value="false"/>
-  </include>
+  </include> -->
 
   <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
   <include file="$(find phantomx_reactor_arm_moveit_config)/launch/planning_context.launch">
-    <arg name="load_robot_description" value="false"/>
+    <arg name="load_robot_description" value="true"/>
   </include>
+
+	<!-- Load arbotix_driver -->
+	<node name="arbotix" pkg="arbotix_python" type="arbotix_driver" output="screen">
+		<!-- Load params in ROS parameter server -->
+		<rosparam file="$(find phantomx_reactor_arm_controller)/config/arbotix_config_phantomx_wrist.yaml" command="load" />
+	</node>
+	
+	<!-- This node coordinates the motors with the parallel/mimic joints -->
+	<node name="phantomx_reactor_controller" pkg="phantomx_reactor_arm_controller" type="phantomx_reactor_parallel_motor_joints.py" output="screen" />
+
+  
+    <!-- Start the node to publish and command the parallel gripper -->
+	<node name="phantomx_reactor_parallel_gripper" pkg="phantomx_reactor_arm_controller" type="phantomx_reactor_gripper.py" output="screen" >
+		<param name="rate" value="15"/>
+		<param name="prismatic_command" value="/phantomx_reactor_controller/gripper_prismatic_joint/command"/>
+	</node>
+
+	<!--<node pkg="phantomx_reactor_arm_moveit_config" type="follow_joint_trajectory" name="follow_joint_trajectory"/> -->
+	
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+
 
   <!-- If needed, broadcast static tf for robot root -->
 
